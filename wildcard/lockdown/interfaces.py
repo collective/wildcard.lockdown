@@ -1,5 +1,5 @@
 from zope import schema
-from plone.app.theming.interfaces import _
+from wildcard.lockdown import _
 from zope.interface import Interface
 
 
@@ -13,8 +13,9 @@ class ISettings(Interface):
         description=_(u"If enabled, it'll by default make the entire site "
                       u"read-only unless it's in debug mode or one of the "
                       u"activated conditions are met. Basically, this could "
-                      u"mean that you will provent yourself from disabling "
-                      u"this feature.")
+                      u"mean that you will prevent yourself from disabling "
+                      u"this feature unless you uninstall the package."),
+        default=False
         )
 
     activated = schema.Set(
@@ -24,5 +25,5 @@ class ISettings(Interface):
         value_type=schema.Choice(vocabulary=u"wildcard.lockdown.conditions"),
         default=set([]),
         missing_value=set([]),
-        required=False,
+        required=False
         )

@@ -1,13 +1,19 @@
 from zope.i18nmessageid import MessageFactory
 import fnmatch
 import re
+import logging
 
 _ = MessageFactory('collective.routes')
+logger = logging.getLogger('wildcard.lockdown')
+
+
+def initialize(context):
+    pass
 
 
 def _checkPath(regex, req):
     url = req.get('ACTUAL_URL', '')
-    if regex.matches(url):
+    if regex.match(url):
         return True
     return False
 
@@ -18,13 +24,18 @@ def _checkRequestMethod(method, req):
 
 
 def _checkPortalType(pt, req):
-    portal_type = getattr(req.published, 'portal_type', None)
+    portal_type = getattr(
+            getattr(req.PARENTS[0], 'aq_base', None),
+            'portal_type',
+            None)
     return portal_type == pt
 
 
-def _checkDomain(domain, req):
+def _checkDomain(regex, req):
     req_domain = req.get('Host')
-    return req_domain == domain
+    if regex.match(req_domain):
+        return True
+    return False
 
 
 def _checkCustom(func, req):
@@ -63,3 +74,9 @@ def checkCondition(name, req):
 
 def getConditionNames():
     return _conditions.keys()
+
+
+addCommitCondition("Allow Lockdown Settings Editing",
+    path="*/@@lockdown-settings",
+    request_method='POST',
+    portal_type="Plone Site")
