@@ -45,11 +45,12 @@ class CommitChecker(object):
 
     def _check_request_method(self, method):
         req_meth = self.req.get('REQUEST_METHOD', '')
-        return method == req_meth
+        return method.lower() == req_meth.lower()
 
     def _check_portal_type(self, pt):
+        item = self.req.PARENTS[0]
         portal_type = getattr(
-                getattr(self.req.PARENTS[0], 'aq_base', None),
+                getattr(item, 'aq_base', item),
                 'portal_type',
                 None)
         return portal_type == pt
