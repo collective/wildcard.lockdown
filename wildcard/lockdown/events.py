@@ -40,7 +40,7 @@ def doomIt(event):
         # let's check if this is valid now.
         try:
             checker = CommitChecker(request, settings.activated)
-            if checker.canCommit():
+            if checker.can_commit():
                 return
         except Exception:
             # if there is any error, ignore and doom

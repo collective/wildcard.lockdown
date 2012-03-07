@@ -37,24 +37,24 @@ class CommitChecker(object):
             self._req_path = '/' + '/'.join(path).lstrip('/')
         return self._req_path
 
-    def _checkPath(self, regex):
+    def _check_path(self, regex):
         path = self.req_path
         if regex.match(path):
             return True
         return False
 
-    def _checkRequestMethod(self, method):
+    def _check_request_method(self, method):
         req_meth = self.req.get('REQUEST_METHOD', '')
         return method == req_meth
 
-    def _checkPortalType(self, pt):
+    def _check_portal_type(self, pt):
         portal_type = getattr(
                 getattr(self.req.PARENTS[0], 'aq_base', None),
                 'portal_type',
                 None)
         return portal_type == pt
 
-    def _checkHost(self, regex):
+    def _check_host(self, regex):
         base1 = self.req.get('BASE1')
         _, base1 = base1.split('://', 1)
         host = base1.lower()
@@ -62,11 +62,11 @@ class CommitChecker(object):
             return True
         return False
 
-    def _checkCustom(self, func):
+    def _check_custom(self, func):
         return func(self.
             req)
 
-    def checkCondition(self, condition):
+    def check_condition(self, condition):
         found = False
         for arg, value in condition.items():
             if arg in self._valid_args:
@@ -76,21 +76,21 @@ class CommitChecker(object):
                     found = True
         return found
 
-    def canCommit(self):
+    def can_commit(self):
         for name in self.conditions:
             if name in _conditions:
                 condition = _conditions[name]
                 # If one condition matches, we're good
-                if self.checkCondition(condition):
+                if self.check_condition(condition):
                     return True
         return False
 
     _valid_args = {
-        'path': _checkPath,
-        'request_method': _checkRequestMethod,
-        'portal_type': _checkPortalType,
-        'host': _checkHost,
-        'custom': _checkCustom}
+        'path': _check_path,
+        'request_method': _check_request_method,
+        'portal_type': _check_portal_type,
+        'host': _check_host,
+        'custom': _check_custom}
 
 
 def addCommitCondition(name, **kwargs):
