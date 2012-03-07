@@ -3,7 +3,7 @@ from plone.registry.interfaces import IRegistry
 from zope.component import adapter
 import transaction
 from ZPublisher.interfaces import IPubAfterTraversal
-from wildcard.lockdown import checkCondition
+from wildcard.lockdown import CommitChecker
 from wildcard.lockdown.interfaces import ILayer
 from wildcard.lockdown.interfaces import ISettings
 from wildcard.lockdown import logger
@@ -25,10 +25,12 @@ def doomIt(event):
         try:
             registry = getUtility(IRegistry)
         except KeyError:
+            logger.warn("settings not installed")
             return  # settings not installed
         try:
             settings = registry.forInterface(ISettings)
         except KeyError:
+            logger.warn("settings not installed")
             return  # settings not registered
 
         if not settings.enabled:
@@ -37,12 +39,11 @@ def doomIt(event):
 
         # let's check if this is valid now.
         try:
-            for condition in settings.activated:
-                if checkCondition(condition, request):
-                    return
+            checker = CommitChecker(request, settings.activated)
+            if checker.canCommit():
+                return
         except Exception:
             # if there is any error, ignore and doom
             # better to be safe..
-            logger.warn("Error checking '%s', dooming the tranaction" %
-                condition)
+            logger.warn("Error checking conditions, dooming the tranaction")
         transaction.doom()

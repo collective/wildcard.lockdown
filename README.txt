@@ -26,12 +26,21 @@ addCommitCondition parameters
 name(required)
 	Name of condition that'll show up in the management inteface
 path
-	An enabling glob expression
+	An enabling glob expression. This path is always based of the relative
+	Plone site, not the Zope root.
 request_method
 	Enabling HTTP request method
 portal_type
 	Published object's portal type
-domain
-	Enabling globing globbing expression for the domain
+host
+	Enabling globing globbing expression for the host name
 custom
-	Custom function to do manual checks against the request object
+	Custom function to do manual checks against the request object.
+	Return True if you want to commit, false if not.
+
+
+Every rule parameter in the commit condition will need to be valid
+in order for the condition to successfully allow the commit.
+
+Only one condition needs to be valid on the request in order for the
+commit to take place.
