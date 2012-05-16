@@ -34,6 +34,8 @@ portal_type
 	Published object's portal type
 host
 	Enabling globing globbing expression for the host name
+logged_in
+	require user to be logged in
 custom
 	Custom function to do manual checks against the request object.
 	Return True if you want to commit, false if not.

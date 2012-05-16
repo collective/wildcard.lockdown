@@ -69,8 +69,13 @@ class CommitChecker(object):
         return False
 
     def _check_custom(self, func):
-        return func(self.
-            req)
+        return func(self.req)
+
+    def _check_logged_in(self, _):
+        mt = getToolByName(self.site, 'portal_membership', None)
+        if not mt:
+            return False
+        return not mt.isAnonymousUser()
 
     def check_condition(self, condition):
         found = False
@@ -96,7 +101,8 @@ class CommitChecker(object):
         'request_method': _check_request_method,
         'portal_type': _check_portal_type,
         'host': _check_host,
-        'custom': _check_custom}
+        'custom': _check_custom,
+        'logged_in': _check_logged_in}
 
 
 def addCommitCondition(name, **kwargs):
@@ -115,3 +121,7 @@ addCommitCondition("Allow Lockdown Settings Editing",
     path="/@@lockdown-settings",
     request_method='POST',
     portal_type="Plone Site")
+addCommitCondition("Logged in user", logged_in=True)
+addCommitCondition("All POST", request_method='POST')
+addCommitCondition("Only localhost", host='localhost:*')
+addCommitCondition("Only 127.0.0.1", host='127.0.0.1:*')

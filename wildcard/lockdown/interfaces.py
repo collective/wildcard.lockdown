@@ -21,7 +21,8 @@ class ISettings(Interface):
     activated = schema.Set(
         title=_(u"Activated Commit Conditions"),
         description=_(u"Select the conditions under which something can be "
-                      u"committed to the database"),
+                      u"committed to the database. Only one rules needs to "
+                      u"be valid to allow commits to occur."),
         value_type=schema.Choice(vocabulary=u"wildcard.lockdown.conditions"),
         default=set([]),
         missing_value=set([]),
