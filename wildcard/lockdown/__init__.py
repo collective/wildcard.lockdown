@@ -1,3 +1,4 @@
+from Products.CMFCore.utils import getToolByName
 from zope.i18nmessageid import MessageFactory
 import fnmatch
 import re
@@ -24,7 +25,11 @@ class CommitChecker(object):
     @property
     def site(self):
         if not hasattr(self, '_site'):
-            self._site = getSite()
+            urltool = getToolByName(self.req.PARENTS[0], 'portal_url', None)
+            if urltool is None:
+                self._site = getSite()
+            else:
+                self._site = urltool.getPortalObject()
         return self._site
 
     @property

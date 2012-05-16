@@ -7,21 +7,27 @@ from wildcard.lockdown import CommitChecker
 from wildcard.lockdown.interfaces import ILayer
 from wildcard.lockdown.interfaces import ISettings
 from wildcard.lockdown import logger
+import traceback
 
 
 # meta types we're not going to bother checking
 # for various reasons
-_blacklisted_meta_types = ('Image', 'File', 'Filesystem Image')
+_blacklisted_meta_types = ('Image', 'File', 'Filesystem Image',
+    'Filesystem File', 'Stylesheets Registry', 'JavaScripts Registry',
+    'DirectoryViewSurrogate', 'KSS Registry', 'Filesystem Directory View')
 
 
 @adapter(IPubAfterTraversal)
 def doomIt(event):
     request = event.request
+    published = request.PARENTS[0]
     mt = getattr(
-            getattr(request.PARENTS[0], 'aq_base', None),
+            getattr(published, 'aq_base', None),
             'meta_type',
-            None)
+            getattr(published, 'meta_type', None))
     if mt not in _blacklisted_meta_types and ILayer.providedBy(request):
+        # print 'checking', repr(published),
+        # print getattr(published, 'meta_type', None)
         try:
             registry = getUtility(IRegistry)
         except KeyError:
@@ -45,5 +51,7 @@ def doomIt(event):
         except Exception:
             # if there is any error, ignore and doom
             # better to be safe..
-            logger.warn("Error checking conditions, dooming the tranaction")
+            logger.warn("Error checking conditions, "
+                        "dooming the tranaction: %s" %
+                            traceback.format_exc())
         transaction.doom()
