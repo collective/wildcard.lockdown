@@ -26,7 +26,7 @@ addCommitCondition parameters
 name(required)
 	Name of condition that'll show up in the management inteface
 path
-	An enabling glob expression. This path is always based of the relative
+	An enabling glob expression. This path is always based off the relative
 	Plone site, not the Zope root.
 request_method
 	Enabling HTTP request method
