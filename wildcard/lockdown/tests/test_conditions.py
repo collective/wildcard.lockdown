@@ -149,7 +149,7 @@ class TestCompoundConditions(unittest.TestCase):
         addCommitCondition("condition",
             path="/foo/bar",
             request_method="POST",
-            domain="www.foobar.com")
+            host="www.foobar.com")
         self.request.set('ACTUAL_URL', self.portal_url + '/foo/bar')
         self.request.set('REQUEST_METHOD', 'POST')
         self.request.set('BASE1', 'http://www.foobar.com')
@@ -160,7 +160,7 @@ class TestCompoundConditions(unittest.TestCase):
         addCommitCondition("condition",
             path="/foo/bar",
             request_method="POST",
-            domain="www.foobar.com")
+            host="www.foobar.com")
         self.request.set('ACTUAL_URL', self.portal_url + '/foo')
         self.request.set('REQUEST_METHOD', 'POST')
         self.request.set('BASE1', 'http://www.foobar.com')
@@ -171,7 +171,7 @@ class TestCompoundConditions(unittest.TestCase):
         addCommitCondition("condition",
             path="/foo/bar",
             request_method="POST",
-            domain="www.foobar.com")
+            host="www.foobar.com")
         self.request.set('ACTUAL_URL', self.portal_url + '/foo')
         self.request.set('REQUEST_METHOD', 'GET')
         self.request.set('BASE1', 'http://www.foboar.com')
@@ -181,7 +181,7 @@ class TestCompoundConditions(unittest.TestCase):
     def test_multiple_conditions_all_success(self):
         addCommitCondition("path", path="/foo/bar")
         addCommitCondition("method", request_method="POST",
-            domain="www.foobar.com")
+            host="www.foobar.com")
         self.request.set('ACTUAL_URL', self.portal_url + '/foo/bar')
         self.request.set('REQUEST_METHOD', 'POST')
         self.request.set('BASE1', 'http://www.foobar.com')
@@ -191,7 +191,7 @@ class TestCompoundConditions(unittest.TestCase):
     def test_multiple_conditions_one_success(self):
         addCommitCondition("path", path="/foo/bar")
         addCommitCondition("method", request_method="POST",
-            domain="www.foobar.com")
+            host="www.foobar.com")
         self.request.set('ACTUAL_URL', self.portal_url + '/foo/bar')
         self.request.set('REQUEST_METHOD', 'GET')
         self.request.set('BASE1', 'http://www.foobar.com')
@@ -201,7 +201,7 @@ class TestCompoundConditions(unittest.TestCase):
     def test_multiple_conditions_all_fail(self):
         addCommitCondition("path", path="/foo/bar")
         addCommitCondition("method", request_method="POST",
-            domain="www.foobar.com")
+            host="www.foobar.com")
         self.request.set('ACTUAL_URL', self.portal_url + '/foo')
         self.request.set('REQUEST_METHOD', 'GET')
         self.request.set('BASE1', 'http://www.foboar.com')

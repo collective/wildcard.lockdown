@@ -15,7 +15,7 @@ An example commit rule::
 	addCommitCondition("User Area",
 		path="/someuserarea/*")
 	addCommitCondition("R/W domain",
-		domain="backend.testsite.com")
+		host="backend.testsite.com")
 
 You'll then need to enable them in the control panel.
 
