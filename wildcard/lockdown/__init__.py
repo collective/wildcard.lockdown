@@ -3,7 +3,10 @@ from zope.i18nmessageid import MessageFactory
 import fnmatch
 import re
 import logging
-from zope.app.component.hooks import getSite
+try:
+    from zope.app.component.hooks import getSite
+except ImportError:
+    from zope.component.hooks import getSite
 
 _ = MessageFactory('collective.routes')
 logger = logging.getLogger('wildcard.lockdown')
