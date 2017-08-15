@@ -1,12 +1,11 @@
 """Event handlers."""
 from ZPublisher.interfaces import IPubAfterTraversal
-from plone.registry.interfaces import IRegistry
+from plone import api
 from wildcard.lockdown import CommitChecker
 from wildcard.lockdown import logger
 from wildcard.lockdown.interfaces import ILayer
 from wildcard.lockdown.interfaces import ISettings
 from zope.component import adapter
-from zope.component import getUtility
 import traceback
 import transaction
 
@@ -41,27 +40,15 @@ def doomIt(event):
         getattr(published, 'aq_base', None),
         'meta_type',
         getattr(published, 'meta_type', None))
-    if mt not in _blacklisted_meta_types and ILayer.providedBy(request):
-        # print 'checking', repr(published),
-        # print getattr(published, 'meta_type', None)
-        try:
-            registry = getUtility(IRegistry)
-        except KeyError:
-            logger.warn('settings not installed')
-            return  # settings not installed
-        try:
-            settings = registry.forInterface(ISettings)
-        except KeyError:
-            logger.warn('settings not installed')
-            return  # settings not registered
-
-        if not settings.enabled:
+    if (mt not in _blacklisted_meta_types) and ILayer.providedBy(request):
+        if not _get_setting('enabled', False):
             # skip out of here first
             return
 
         # let's check if this is valid now.
+        activated = _get_setting('activated', set())
         try:
-            checker = CommitChecker(request, settings.activated)
+            checker = CommitChecker(request, activated)
             if checker.can_commit():
                 return
         except Exception:
@@ -71,3 +58,10 @@ def doomIt(event):
                 'transaction: {}'.format(traceback.format_exc()))
 
         transaction.doom()
+
+
+def _get_setting(name, default=api.portal.MISSING):
+    return api.portal.get_registry_record(
+        name=name,
+        interface=ISettings,
+        default=default)
