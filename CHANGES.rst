@@ -1,13 +1,23 @@
 Changelog
 =========
 
+1.1 (unreleased)
+----------------
+
+- Allow to display a status message for logged in users when the lockdown is
+  enabled.
+  [rafaelbco]
+
+
 1.0 (2014-05-04)
 ----------------
 
 - plone 4.3 compat
+  [vangheem]
 
 
 1.0a1 (2012-05-16)
 ------------------
 
 - Initial release
+  [vangheem]

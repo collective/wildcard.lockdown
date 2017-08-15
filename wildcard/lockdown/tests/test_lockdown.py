@@ -25,6 +25,8 @@ class TestLockdown(unittest.TestCase):
         createObject(folder, 'News Item', 'test1', title="Test 1")
         createObject(folder, 'News Item', 'test2', title="Test 2")
         createObject(self.portal, 'Document', 'testpage', title="Test page")
+        registry = getUtility(IRegistry)
+        self._settings = registry.forInterface(ISettings)
 
         transaction.commit()
         self.browser = Browser(self.layer['app'])
@@ -32,18 +34,14 @@ class TestLockdown(unittest.TestCase):
         browserLogin(self.portal, self.browser)
 
     def activateCondition(self, name=None):
-        registry = getUtility(IRegistry)
-        settings = registry.forInterface(ISettings)
-        settings.enabled = True
+        self._settings.enabled = True
         if name:
-            settings.activated = set((name,))
+            self._settings.activated = set((name,))
         transaction.commit()
 
     def disableConditions(self):
-        registry = getUtility(IRegistry)
-        settings = registry.forInterface(ISettings)
-        settings.enabled = False
-        settings.activated = set(())
+        self._settings.enabled = False
+        self._settings.activated = set(())
         transaction.commit()
 
     def test_prevents_committing_to_database(self):
@@ -78,3 +76,14 @@ class TestLockdown(unittest.TestCase):
         self.browser.getControl(name='title').value = newtitle
         self.browser.getControl(name='form.button.save').click()
         self.assertTrue(newtitle in self.browser.contents)
+
+    def test_show_status_message(self):
+        message = u'This site is in read-only mode!!!'
+        self.activateCondition()
+        self.browser.open(self.portal_url)
+        self.assertFalse(message.encode('utf8') in self.browser.contents)
+
+        self._settings.status_message = message
+        transaction.commit()
+        self.browser.open(self.portal_url)
+        self.assertTrue(message.encode('utf8') in self.browser.contents)

@@ -29,3 +29,11 @@ class ISettings(Interface):
         default=set(),
         missing_value=set(),
         required=False)
+
+    status_message = schema.Text(
+        title=_(u'Status message'),
+        description=_(u'An status message to be displayed to authenticated '
+                      u'users users when the lockdown is enabled. Leave empty to '
+                      u'display nothing.'),
+        required=False,
+        default=u'')

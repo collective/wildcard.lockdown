@@ -45,6 +45,14 @@ def doomIt(event):
             # skip out of here first
             return
 
+        status_message = _get_setting('status_message', None) or u''
+        status_message = status_message.strip()
+        if status_message and (not api.user.is_anonymous()):
+            api.portal.show_message(
+                status_message,
+                request=request,
+                type='warn')
+
         # let's check if this is valid now.
         activated = _get_setting('activated', set())
         try:
