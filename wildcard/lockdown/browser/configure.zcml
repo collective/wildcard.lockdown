@@ -1,0 +1,14 @@
+<configure xmlns="http://namespaces.zope.org/zope"
+           xmlns:browser="http://namespaces.zope.org/browser"
+           xmlns:i18n="http://namespaces.zope.org/i18n"
+           xmlns:plone="http://namespaces.plone.org/plone"
+           xmlns:zcml="http://namespaces.zope.org/zcml"
+           i18n_domain="trt3.calendarapi">
+
+  <browser:page
+    for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+    name="manage-lockdown"
+    permission="cmf.ManagePortal"
+    class=".manage.ManageLockdownView" />
+
+</configure>

@@ -145,6 +145,11 @@ addCommitCondition(
     request_method='POST',
     portal_type="Plone Site")
 addCommitCondition(
+    "Web API",
+    path="/@@manage-lockdown",
+    request_method='POST',
+    portal_type="Plone Site")
+addCommitCondition(
     "Logged in user",
     logged_in=True)
 addCommitCondition(
