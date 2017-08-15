@@ -1,9 +1,10 @@
 """Condition checking."""
 from Products.CMFCore.utils import getToolByName
+from plone import api
 from zope.i18nmessageid import MessageFactory
 import fnmatch
-import re
 import logging
+import re
 
 
 try:
@@ -134,6 +135,10 @@ def getConditionNames():
     return _conditions.keys()
 
 
+def _isManager(request):
+    return 'Manager' in api.user.get_roles()
+
+
 addCommitCondition(
     "Allow Lockdown Settings Editing",
     path="/@@lockdown-settings",
@@ -142,6 +147,9 @@ addCommitCondition(
 addCommitCondition(
     "Logged in user",
     logged_in=True)
+addCommitCondition(
+    "Manager user",
+    custom=_isManager)
 addCommitCondition(
     "All POST",
     request_method='POST')
