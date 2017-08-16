@@ -8,6 +8,12 @@ Changelog
   enabled.
   [rafaelbco]
 
+- Add Web API.
+  [rafaelbco]
+
+- Add predefined condition "Manager user".
+  [rafaelbco]
+
 
 1.0 (2014-05-04)
 ----------------
