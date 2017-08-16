@@ -5,7 +5,7 @@ from wildcard.lockdown.testing import browserLogin
 from wildcard.lockdown.testing import createObject
 from plone.testing.z2 import Browser
 import transaction
-import unittest2 as unittest
+import unittest
 from wildcard.lockdown.testing import Lockdown_FUNCTIONAL_TESTING
 
 
