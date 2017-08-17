@@ -1,4 +1,4 @@
-import unittest2 as unittest
+import unittest
 from wildcard.lockdown.testing import Lockdown_FUNCTIONAL_TESTING
 from wildcard.lockdown import CommitChecker
 from wildcard.lockdown import addCommitCondition
