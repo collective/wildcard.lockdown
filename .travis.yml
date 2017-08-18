@@ -21,8 +21,7 @@ install:
   - buildout annotate
   - buildout
 script:
-  - bin/test
-after_success:
   - bin/createcoverage -d htmlcov
+after_success:
   - pip install coveralls
   - coveralls
