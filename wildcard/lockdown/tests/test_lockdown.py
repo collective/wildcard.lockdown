@@ -7,6 +7,12 @@ from plone.testing.z2 import Browser
 import transaction
 import unittest
 from wildcard.lockdown.testing import Lockdown_FUNCTIONAL_TESTING
+from wildcard.lockdown.testing import IS_PLONE_5
+
+
+title_filed = 'title'
+if IS_PLONE_5:
+    title_filed = 'form.widgets.IDublinCore.title'
 
 
 class TestLockdown(unittest.TestCase):
@@ -44,15 +50,18 @@ class TestLockdown(unittest.TestCase):
         self._settings.activated = set(())
         transaction.commit()
 
+    def changeTitle(self, url, newtitle):
+        self.browser.open(url + '/edit')
+        self.browser.getControl(name=title_filed).value = newtitle
+        self.browser.getControl('Save').click()
+
     def test_prevents_committing_to_database(self):
         self.activateCondition()
         baseurl = self.portal_url + '/testpage'
         newtitle = "EDITED TITLE"
         self.browser.open(baseurl)
         self.assertTrue(newtitle not in self.browser.contents)
-        self.browser.open(baseurl + '/edit')
-        self.browser.getControl(name='title').value = newtitle
-        self.browser.getControl(name='form.button.save').click()
+        self.changeTitle(baseurl, newtitle)
         self.assertTrue(newtitle not in self.browser.contents)
 
     def test_allows_writing_to_database(self):
@@ -61,9 +70,7 @@ class TestLockdown(unittest.TestCase):
         newtitle = "EDITED TITLE"
         self.browser.open(baseurl)
         self.assertTrue(newtitle not in self.browser.contents)
-        self.browser.open(baseurl + '/edit')
-        self.browser.getControl(name='title').value = newtitle
-        self.browser.getControl(name='form.button.save').click()
+        self.changeTitle(baseurl, newtitle)
         self.assertTrue(newtitle in self.browser.contents)
 
     def test_condition_should_allow_commit(self):
@@ -72,9 +79,7 @@ class TestLockdown(unittest.TestCase):
         newtitle = "EDITED TITLE"
         self.browser.open(baseurl)
         self.assertTrue(newtitle not in self.browser.contents)
-        self.browser.open(baseurl + '/edit')
-        self.browser.getControl(name='title').value = newtitle
-        self.browser.getControl(name='form.button.save').click()
+        self.changeTitle(baseurl, newtitle)
         self.assertTrue(newtitle in self.browser.contents)
 
     def test_show_status_message(self):

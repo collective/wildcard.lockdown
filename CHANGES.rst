@@ -20,6 +20,9 @@ Changelog
 - Minor cleanups here and there.
   [gforcada]
 
+- Add Plone 5 compatibility.
+  [gforcada]
+
 1.0 (2014-05-04)
 ----------------
 
