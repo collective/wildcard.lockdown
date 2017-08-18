@@ -23,3 +23,7 @@ install:
   - buildout
 script:
   - bin/test
+after_success:
+  - bin/createcoverage -d htmlcov
+  - pip install coveralls
+  - coveralls

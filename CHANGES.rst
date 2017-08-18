@@ -14,6 +14,8 @@ Changelog
 - Add predefined condition "Manager user".
   [rafaelbco]
 
+- Add coverage reports.
+  [gforcada]
 
 1.0 (2014-05-04)
 ----------------
