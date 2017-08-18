@@ -17,6 +17,9 @@ Changelog
 - Add coverage reports.
   [gforcada]
 
+- Minor cleanups here and there.
+  [gforcada]
+
 1.0 (2014-05-04)
 ----------------
 
